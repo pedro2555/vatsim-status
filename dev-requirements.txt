@@ -1,3 +1,4 @@
 setuptools
 setuptools-lint
+flake8
 ddt

@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 Vatsim Status API
 Copyright (C) 2018  Pedro Rodrigues <prodrigues1990@gmai.com>
@@ -16,11 +18,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Vatsim Status API.  If not, see <http://www.gnu.org/licenses/>.
 """
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import unittest
-from ddt import ddt, data, file_data, unpack
+from ddt import ddt, data, unpack
 
 from vatsim_status import data_file_parser
 
@@ -51,11 +51,8 @@ class TestDataFileParser(unittest.TestCase):
             }
         }
     )
-    def testPiecesToObject_correctKeyValueAssigment_objectEquals(
-        self, keys, pieces, expected):
-        """Keys and values assigned, empty values trimmed out"""
-        obj = data_file_parser.pieces_to_object(keys, pieces)
-        self.assertEqual(obj, expected)
+    def test_vzip_returns_expectedObject(self, keys, pieces, expected):
+        self.assertEqual(data_file_parser.vzip(keys, pieces), expected)
 
     @unpack
     @data(
@@ -63,11 +60,19 @@ class TestDataFileParser(unittest.TestCase):
         {'keys': 'k', 'pieces': 'v1:v2'},
         {'keys': 'k', 'pieces': 'v1:v2:'}
     )
-    def testPiecesToObject_differentSizeKeysPieces_throwsValueError(
-        self, keys, pieces):
-        """Wrongly sized pieces should throw a ValueError with the pieces"""
+    def test_vzip_keyValuesDontMatch_throwsValueError(self, keys, pieces):
         with self.assertRaisesRegex(ValueError, '(%s)' % pieces):
-            obj = data_file_parser.pieces_to_object(keys, pieces)
+            data_file_parser.vzip(keys, pieces)
+
+    @unpack
+    @data(
+        {'keys': [], 'pieces': 'v'},
+        {'keys': 'k', 'pieces': []},
+        {'keys': [], 'pieces': []}
+    )
+    def test_vzip_nonStrings_throwsValueError(self, keys, pieces):
+        with self.assertRaisesRegex(ValueError, '(%s)' % 'list'):
+            data_file_parser.vzip(keys, pieces)
 
     def tearDown(self):
         pass

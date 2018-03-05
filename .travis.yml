@@ -9,5 +9,5 @@ python:
 before_script: "pip install -r dev-requirements.txt"
 install: "pip install -r requirements.txt"
 script:
-  - "python setup.py lint"
+  - "flake8"
   - "python setup.py test"

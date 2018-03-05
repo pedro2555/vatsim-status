@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 Vatsim Status API
 Copyright (C) 2018  Pedro Rodrigues <prodrigues1990@gmai.com>
@@ -16,5 +18,3 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Vatsim Status API.  If not, see <http://www.gnu.org/licenses/>.
 """
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-

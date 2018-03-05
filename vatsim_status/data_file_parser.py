@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 Vatsim Status API
 Copyright (C) 2018  Pedro Rodrigues <prodrigues1990@gmai.com>
@@ -16,9 +18,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Vatsim Status API.  If not, see <http://www.gnu.org/licenses/>.
 """
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-def pieces_to_object(keys, pieces):
+
+
+def vzip(keys, pieces):
     """Parses a string of colon separated key strings into an object with the
     corresponding keys associated with the corresponding values.
 
@@ -27,13 +29,19 @@ def pieces_to_object(keys, pieces):
     pieces_to_object('k1:k2', 'v1:v2')
     >>> {'k1': 'v2', 'k2': 'v2'}
     """
-    keys = keys.split(':')
-    pieces = pieces.split(':')
+    try:
+        keys = keys.split(':')
+        pieces = pieces.split(':')
+    except AttributeError:
+        raise ValueError(
+            '\'string\', \'string\' expected %s, %s given: %s, %s' % (
+                keys.__class__.__name__, keys,
+                pieces.__class__.__name__, pieces))
 
     if len(keys) != len(pieces):
         raise ValueError(
-            'Pieces count doesn\'t match keys count for \'%s\''\
-             % ':'.join(pieces))
+            'Pieces count doesn\'t match keys count for \'%s\'' % (
+                ':'.join(pieces)))
 
     obj = {}
     for key, piece in zip(keys, pieces):
