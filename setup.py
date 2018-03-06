@@ -35,7 +35,10 @@ requirements = [
 ]
 
 test_requirements = [
-    # TODO: put package test requirements here
+    'setuptools',
+    'setuptools-lint',
+    'flake8',
+    'ddt'
 ]
 
 setup(

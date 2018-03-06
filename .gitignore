@@ -1,3 +1,5 @@
+.eggs
+.tox
 bin
 build
 dist
