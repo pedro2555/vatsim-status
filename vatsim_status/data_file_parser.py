@@ -18,6 +18,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Vatsim Status API.  If not, see <http://www.gnu.org/licenses/>.
 """
+from contextlib import suppress
 
 
 def vzip(keys, pieces):
@@ -34,18 +35,21 @@ def vzip(keys, pieces):
         pieces = pieces.split(':')
     except AttributeError:
         raise ValueError(
-            '\'string\', \'string\' expected %s, %s given: %s, %s' % (
+            "'string', 'string' expected %s, %s given: %s, %s" % (
                 keys.__class__.__name__, keys,
                 pieces.__class__.__name__, pieces))
 
     if len(keys) != len(pieces):
         raise ValueError(
-            'Pieces count doesn\'t match keys count for \'%s\'' % (
+            "Pieces count doesn't match keys count for '%s'" % (
                 ':'.join(pieces)))
 
-    obj = {}
-    for key, piece in zip(keys, pieces):
-        if key and piece:
-            obj[key] = piece
+    obj = dict(zip(keys, pieces))
+
+    # we will use this function to blindly populate mongo documents for the raw
+    # data endpoints, so we want to avoid empty keys in particular; they don't
+    # make much sense either
+    with suppress(KeyError):
+        del obj['']
 
     return obj
