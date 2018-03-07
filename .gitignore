@@ -14,3 +14,4 @@ man
 sample.data
 pip-selfcheck.json
 share
+*.db

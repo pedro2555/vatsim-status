@@ -21,6 +21,8 @@ along with Vatsim Status API.  If not, see <http://www.gnu.org/licenses/>.
 
 import unittest
 from ddt import ddt, data, unpack
+import os
+from contextlib import suppress
 
 import vatsim_status
 from vatsim_status import data_file_parser
@@ -29,18 +31,19 @@ from vatsim_status import data_file_parser
 @ddt
 class TestDataFileParser(unittest.TestCase):
 
-    def setUp(self):
-        pass
+    def test__load_callsigns_from_txt(self):
+        with suppress(FileNotFoundError):
+            os.remove('vatsim_status/callsigns.db')
+        vatsim_status._load_callsigns_from_txt(
+            'vatsim_status/callsigns.txt')
+        self.assertNotEqual(dict(vatsim_status.CALLSIGNS), {})
 
-    def test_init(self):
-        self.assertNotEqual(vatsim_status.COUNTRIES, {})
-        self.assertNotEqual(vatsim_status.AIRPORTS, {})
-        self.assertNotEqual(vatsim_status.CALLSIGNS, {})
-
-        self.assertTrue('LP' in vatsim_status.COUNTRIES)
-        self.assertTrue('LPPT' in vatsim_status.AIRPORTS)
-        self.assertTrue('GREN' in vatsim_status.CALLSIGNS)
-        self.assertTrue('BGG1' in vatsim_status.CALLSIGNS)
+    def test__load_geometries_from_txt(self):
+        with suppress(FileNotFoundError):
+            os.remove('vatsim_status/geometries.db')
+        vatsim_status._load_geometries_from_txt(
+            'vatsim_status/fir_boundaries.txt')
+        self.assertNotEqual(dict(vatsim_status.GEOMETRIES), {})
 
     @unpack
     @data(
